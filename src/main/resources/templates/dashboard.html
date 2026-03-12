@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Centro Fotocopiado Joyma</title>
+    <!-- Fuentes de Google y Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vincula los estilos compartidos -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <!-- Encabezado con navegación superior -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-water"></i>
+            <div>Copycenter Joyma</div>
+        </div>
+        <nav class="header-nav">
+            <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+        </nav>
+    </header>
+
+    <!-- Contenedor Principal (Dashboard) -->
+    <main class="main-content">
+        <section class="dashboard-header">
+            <h1 class="section-title" th:text="'Bienvenido, ' + ${customer.name}">Dashboard del Cliente</h1>
+            <p>Aquí puedes revisar el estado de tus pedidos o crear uno nuevo.</p>
+            <br>
+            <button class="login-btn" style="width: auto; padding: 10px 20px; margin-bottom: 20px;" onclick="openModal()">
+                <i class="fa-solid fa-plus"></i> Crear Nuevo Pedido
+            </button>
+        </section>
+
+        <section class="orders-section">
+            <h2 class="section-title" style="font-size: 28px;">Mis Pedidos</h2>
+            
+            <div th:if="${orders.empty}" class="info-box" style="text-align: center; min-height: auto;">
+                <p>No tienes pedidos actualmente.</p>
+            </div>
+
+            <div th:unless="${orders.empty}" class="orders-grid">
+                <!-- Mostraremos pedidos en tarjetas -->
+                <div class="service-card" th:each="order : ${orders}" style="flex-direction: column; align-items: flex-start;">
+                    <h3 th:text="'Pedido #' + ${order.id}">Pedido #1</h3>
+                    <p style="margin-top: 10px; font-weight: bold; color: var(--primary-light);">
+                        Estado: <span th:text="${order.status}"> RECEIVED </span>
+                    </p>
+                    <p style="color: var(--text-color); margin-top: 5px;">
+                        Monto: $<span th:text="${order.totalAmount}">0.00</span>
+                    </p>
+                    <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                        Fecha: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Form for Creating Order -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="login-header" style="margin-bottom: 20px;">
+                <h2 style="font-size: 24px;">Crear Pedido</h2>
+            </div>
+            
+            <form th:action="@{/orders}" method="post">
+                <div class="form-group">
+                    <label for="totalAmount">Monto Estimado del Pedido ($)</label>
+                    <input type="number" step="0.01" id="totalAmount" name="totalAmount" placeholder="0.00" required>
+                </div>
+                <!-- Para propósitos demostrativos mantenemos el formulario simple -->
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    En un futuro cercano aquí podrás subir tus archivos, seleccionar tipo de empastado, copias color o b/n, etc.
+                </p>
+                <button type="submit" class="login-btn">
+                    Enviar Pedido <i class="fa-solid fa-paper-plane" style="margin-left: 5px;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="main-footer">
+        <div class="social-icons-wrapper">
+            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-title">
+            Copycenter Joyma
+        </div>
+    </footer>
+
+    <script>
+        var modal = document.getElementById("orderModal");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

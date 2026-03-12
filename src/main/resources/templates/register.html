@@ -4,17 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Centro Fotocopiado Joyma</title>
+    <title>Registro - Centro Fotocopiado Joyma</title>
     <!-- Fuentes de Google y Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Vincula los estilos compartidos -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <!-- Los estilos específicos de login ahora están en styles.css -->
 </head>
 
 <body>
-    <!-- Encabezado con navegación superior (reducido para login) -->
+    <!-- Encabezado con navegación superior -->
     <header class="main-header">
         <div class="logo">
             <i class="fa-solid fa-water"></i>
@@ -22,32 +21,32 @@
         </div>
         <nav class="header-nav">
             <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a th:href="@{/login}"><i class="fa-solid fa-user"></i> Login</a>
         </nav>
     </header>
 
-    <!-- Contenedor Principal (Login Form) -->
+    <!-- Contenedor Principal (Registro Form) -->
     <main class="login-container">
-        <div class="login-box">
+        <div class="login-box" style="max-width: 550px;">
             <div class="login-header">
-                <i class="fa-solid fa-user-lock"></i>
-                <h2>Iniciar Sesión</h2>
+                <i class="fa-solid fa-user-plus"></i>
+                <h2>Crea tu Cuenta</h2>
             </div>
 
-            <div th:if="${success}" class="success-message" id="successBanner">
-                <i class="fa-solid fa-circle-check"></i>
-                <span th:text="${success}"></span>
-            </div>
-            
             <div th:if="${error}" class="error-message">
                 <i class="fa-solid fa-circle-exclamation"></i>
                 <span th:text="${error}"></span>
             </div>
 
-            <form th:action="@{/login}" method="post">
+            <form th:action="@{/register}" method="post">
                 <div class="form-group">
-                    <label for="username">Nombre de Usuario o Email</label>
-                    <input type="text" id="username" name="username" placeholder="Ej: Jonathan Rugama" required
-                        autofocus>
+                    <label for="name">Nombre Completo</label>
+                    <input type="text" id="name" name="name" placeholder="Ej: Jonathan Rugama" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
                 </div>
 
                 <div class="form-group">
@@ -55,28 +54,20 @@
                     <input type="password" id="password" name="password" placeholder="Tu contraseña" required>
                 </div>
 
-                <button type="submit" class="login-btn">Ingresar <i class="fa-solid fa-arrow-right-to-bracket"
-                        style="margin-left: 5px;"></i></button>
+                <div class="form-group">
+                    <label for="address">Dirección</label>
+                    <input type="text" id="address" name="address" placeholder="Tu dirección principal" required>
+                </div>
+
+                <button type="submit" class="login-btn">Registrarse <i class="fa-solid fa-check" style="margin-left: 5px;"></i></button>
             </form>
             
             <div style="text-align: center; margin-top: 20px;">
-                <span style="color: var(--text-color);">¿No tienes una cuenta? </span>
-                <a th:href="@{/register}" style="color: var(--primary-color); font-weight: 500; text-decoration: none;">Regístrate aquí</a>
+                <span style="color: var(--text-color);">¿Ya tienes una cuenta? </span>
+                <a th:href="@{/login}" style="color: var(--primary-color); font-weight: 500; text-decoration: none;">Inicia sesión aquí</a>
             </div>
         </div>
     </main>
-    
-    <script>
-        // Ocultar banner de éxito después de 5 segundos
-        const successBanner = document.getElementById('successBanner');
-        if (successBanner) {
-            setTimeout(() => {
-                successBanner.style.transition = "opacity 0.5s ease";
-                successBanner.style.opacity = "0";
-                setTimeout(() => successBanner.remove(), 500);
-            }, 5000);
-        }
-    </script>
 
     <!-- Pie de página -->
     <footer class="main-footer">

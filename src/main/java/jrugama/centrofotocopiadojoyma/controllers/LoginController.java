@@ -22,13 +22,21 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String processLogin(@RequestParam String username, @RequestParam String password, Model model) {
+    public String processLogin(@RequestParam String username, @RequestParam String password, Model model,
+            jakarta.servlet.http.HttpSession session) {
         if (appUserService.authenticate(username, password)) {
-            // Si es correcto, redirigimos a home o dashboard (por ahora home)
-            return "redirect:/";
+            session.setAttribute("username", username);
+            // Si es correcto, redirigimos a dashboard
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("error", "Credenciales inválidas. Intente de nuevo.");
             return "login";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(jakarta.servlet.http.HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }
