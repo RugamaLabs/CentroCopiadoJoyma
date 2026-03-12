@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Centro Fotocopiado Joyma</title>
+    <!-- Fuentes de Google y Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vincula los estilos compartidos -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Los estilos específicos de login ahora están en styles.css -->
+</head>
+
+<body>
+    <!-- Encabezado con navegación superior (reducido para login) -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-water"></i>
+            <div>Copycenter Joyma</div>
+        </div>
+        <nav class="header-nav">
+            <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
+        </nav>
+    </header>
+
+    <!-- Contenedor Principal (Login Form) -->
+    <main class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fa-solid fa-user-lock"></i>
+                <h2>Iniciar Sesión</h2>
+            </div>
+
+            <div th:if="${error}" class="error-message">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario o Email</label>
+                    <input type="text" id="username" name="username" placeholder="Ej: Jonathan Rugama" required
+                        autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Tu contraseña" required>
+                </div>
+
+                <button type="submit" class="login-btn">Ingresar <i class="fa-solid fa-arrow-right-to-bracket"
+                        style="margin-left: 5px;"></i></button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="main-footer">
+        <div class="social-icons-wrapper">
+            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-title">
+            Copycenter Joyma
+        </div>
+    </footer>
+</body>
+
+</html>
