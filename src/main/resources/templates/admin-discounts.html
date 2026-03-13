@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descuentos - Centro Fotocopiado Joyma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <!-- Encabezado -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-water"></i>
+            <div>Copycenter Joyma (Panel de Administrador)</div>
+        </div>
+        <nav class="header-nav">
+            <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+        </nav>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar Izquierdo -->
+        <aside class="admin-sidebar">
+            <ul class="sidebar-menu">
+                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-box"></i> Pedidos</a></li>
+                <li><a href="#"><i class="fa-solid fa-users"></i> Administración de Usuarios</a></li>
+                <li><a th:href="@{/admin/discounts}" class="active"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
+                <li><a th:href="@{/admin/services}"><i class="fa-solid fa-cogs"></i> Servicios</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="admin-content">
+            <section class="dashboard-header" style="text-align: left; padding: 20px 0;">
+                <h1 class="section-title">Gestión de Descuentos</h1>
+                <p>Administra los descuentos disponibles para los servicios del centro de fotocopiado.</p>
+            </section>
+
+            <!-- Banner de Éxito -->
+            <div th:if="${successMessage}" id="successBanner" class="success-message" style="margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-check" style="margin-right: 8px;"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <!-- Botón Agregar -->
+            <div style="margin-bottom: 20px;">
+                <button class="login-btn" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('addModal').style.display='block'">
+                    <i class="fa-solid fa-plus" style="margin-right: 8px;"></i> Agregar Descuento
+                </button>
+            </div>
+
+            <!-- Tabla de Descuentos -->
+            <div class="info-box" style="min-height: auto; padding: 0; overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Porcentaje (%)</th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${discounts.empty}">
+                            <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No hay descuentos registrados.</td>
+                        </tr>
+                        <tr th:each="discount : ${discounts}">
+                            <td th:text="${discount.id}"></td>
+                            <td th:text="${discount.description}"></td>
+                            <td th:text="${discount.percentage} + '%'"></td>
+                            <td>
+                                <span th:if="${discount.isActive}" style="color: #2e7d32; font-weight: bold;">Sí</span>
+                                <span th:unless="${discount.isActive}" style="color: #c62828; font-weight: bold;">No</span>
+                            </td>
+                            <td class="actions-cell">
+                                <button class="action-btn edit-btn"
+                                        th:data-id="${discount.id}"
+                                        th:data-description="${discount.description}"
+                                        th:data-percentage="${discount.percentage}"
+                                        th:data-active="${discount.isActive}"
+                                        onclick="openEditModal(this)">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <form th:action="@{'/admin/discounts/' + ${discount.id} + '/delete'}" method="post" style="display: inline;">
+                                    <button type="submit" class="action-btn delete-btn" onclick="return confirm('¿Estás seguro de eliminar este descuento?')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Agregar Descuento -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('addModal').style.display='none'">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 20px;">Agregar Descuento</h2>
+            <form th:action="@{/admin/discounts/add}" method="post">
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <input type="text" id="description" name="description" required placeholder="Ej: Descuento por volumen">
+                </div>
+                <div class="form-group">
+                    <label for="percentage">Porcentaje (%)</label>
+                    <input type="number" id="percentage" name="percentage" step="0.01" min="0" max="100" required placeholder="Ej: 15.00">
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="isActive" name="isActive" value="true" style="width: auto;">
+                    <label for="isActive" style="margin-bottom: 0;">Activo</label>
+                </div>
+                <button type="submit" class="login-btn">Guardar Descuento</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Descuento -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 20px;">Editar Descuento</h2>
+            <form id="editForm" method="post">
+                <div class="form-group">
+                    <label for="editDescription">Descripción</label>
+                    <input type="text" id="editDescription" name="description" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPercentage">Porcentaje (%)</label>
+                    <input type="number" id="editPercentage" name="percentage" step="0.01" min="0" max="100" required>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="editIsActive" name="isActive" value="true" style="width: auto;">
+                    <label for="editIsActive" style="margin-bottom: 0;">Activo</label>
+                </div>
+                <button type="submit" class="login-btn">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="main-footer">
+        <div class="social-icons-wrapper">
+            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-title">
+            Copycenter Joyma
+        </div>
+    </footer>
+
+    <script>
+        // Auto-ocultar banner después de 5 segundos
+        const banner = document.getElementById('successBanner');
+        if (banner) {
+            setTimeout(() => {
+                banner.style.transition = 'opacity 0.6s ease';
+                banner.style.opacity = '0';
+                setTimeout(() => banner.remove(), 600);
+            }, 5000);
+        }
+
+        // Cerrar modales al hacer clic fuera
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Abrir modal de edición con datos pre-cargados desde data-* attributes
+        function openEditModal(btn) {
+            const id = btn.dataset.id;
+            const description = btn.dataset.description;
+            const percentage = btn.dataset.percentage;
+            const isActive = btn.dataset.active === 'true';
+            document.getElementById('editForm').action = '/admin/discounts/' + id + '/edit';
+            document.getElementById('editDescription').value = description;
+            document.getElementById('editPercentage').value = percentage;
+            document.getElementById('editIsActive').checked = isActive;
+            document.getElementById('editModal').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

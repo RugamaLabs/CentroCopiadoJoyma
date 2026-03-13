@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Centro Fotocopiado Joyma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <!-- Encabezado -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-water"></i>
+            <div>Copycenter Joyma (Panel de Administrador)</div>
+        </div>
+        <nav class="header-nav">
+            <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+        </nav>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar Izquierdo -->
+        <aside class="admin-sidebar">
+            <ul class="sidebar-menu">
+                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-box"></i> Pedidos</a></li>
+                <li><a href="#"><i class="fa-solid fa-users"></i> Administración de Usuarios</a></li>
+                <li><a th:href="@{/admin/discounts}"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
+                <li><a th:href="@{/admin/services}" class="active"><i class="fa-solid fa-cogs"></i> Servicios</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="admin-content">
+            <section class="dashboard-header" style="text-align: left; padding: 20px 0;">
+                <h1 class="section-title">Gestión de Servicios</h1>
+                <p>Administra los servicios ofrecidos por el centro de fotocopiado.</p>
+            </section>
+
+            <!-- Banner de Éxito -->
+            <div th:if="${successMessage}" id="successBanner" class="success-message" style="margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-check" style="margin-right: 8px;"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <!-- Botón Agregar -->
+            <div style="margin-bottom: 20px;">
+                <button class="login-btn" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('addModal').style.display='block'">
+                    <i class="fa-solid fa-plus" style="margin-right: 8px;"></i> Agregar Servicio
+                </button>
+            </div>
+
+            <!-- Tabla de Servicios -->
+            <div class="info-box" style="min-height: auto; padding: 0; overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio Base</th>
+                            <th>Descuento Asociado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${services.empty}">
+                            <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No hay servicios registrados.</td>
+                        </tr>
+                        <tr th:each="service : ${services}">
+                            <td th:text="${service.id}"></td>
+                            <td th:text="${service.name}"></td>
+                            <td th:text="'$' + ${service.basePrice}"></td>
+                            <td>
+                                <span th:if="${service.discount != null}" th:text="${service.discount.description} + ' (' + ${service.discount.percentage} + '%)'"></span>
+                                <span th:unless="${service.discount != null}" style="color: #999;">Sin descuento</span>
+                            </td>
+                            <td class="actions-cell">
+                                <button class="action-btn edit-btn"
+                                        th:data-id="${service.id}"
+                                        th:data-name="${service.name}"
+                                        th:data-price="${service.basePrice}"
+                                        th:data-discount-id="${service.discount != null ? service.discount.id : ''}"
+                                        onclick="openEditModal(this)">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <form th:action="@{'/admin/services/' + ${service.id} + '/delete'}" method="post" style="display: inline;">
+                                    <button type="submit" class="action-btn delete-btn" onclick="return confirm('¿Estás seguro de eliminar este servicio?')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Agregar Servicio -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('addModal').style.display='none'">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 20px;">Agregar Servicio</h2>
+            <form th:action="@{/admin/services/add}" method="post">
+                <div class="form-group">
+                    <label for="name">Nombre del Servicio</label>
+                    <input type="text" id="name" name="name" required placeholder="Ej: Copias Blanco y Negro">
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Precio Base ($)</label>
+                    <input type="number" id="basePrice" name="basePrice" step="0.01" min="0" required placeholder="Ej: 25.00">
+                </div>
+                <div class="form-group">
+                    <label for="discountId">Descuento (Opcional)</label>
+                    <select id="discountId" name="discountId" class="form-group input" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                        <option value="">Sin descuento</option>
+                        <option th:each="discount : ${discounts}" th:value="${discount.id}" th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
+                    </select>
+                </div>
+                <button type="submit" class="login-btn">Guardar Servicio</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Servicio -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 20px;">Editar Servicio</h2>
+            <form id="editForm" method="post">
+                <div class="form-group">
+                    <label for="editName">Nombre del Servicio</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBasePrice">Precio Base ($)</label>
+                    <input type="number" id="editBasePrice" name="basePrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDiscountId">Descuento (Opcional)</label>
+                    <select id="editDiscountId" name="discountId" class="form-group input" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                        <option value="">Sin descuento</option>
+                        <option th:each="discount : ${discounts}" th:value="${discount.id}" th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
+                    </select>
+                </div>
+                <button type="submit" class="login-btn">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="main-footer">
+        <div class="social-icons-wrapper">
+            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-title">
+            Copycenter Joyma
+        </div>
+    </footer>
+
+    <script>
+        // Auto-ocultar banner después de 5 segundos
+        const banner = document.getElementById('successBanner');
+        if (banner) {
+            setTimeout(() => {
+                banner.style.transition = 'opacity 0.6s ease';
+                banner.style.opacity = '0';
+                setTimeout(() => banner.remove(), 600);
+            }, 5000);
+        }
+
+        // Cerrar modales al hacer clic fuera
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Abrir modal de edición con datos pre-cargados desde data-* attributes
+        function openEditModal(btn) {
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const basePrice = btn.dataset.price;
+            const discountId = btn.dataset.discountId;
+            document.getElementById('editForm').action = '/admin/services/' + id + '/edit';
+            document.getElementById('editName').value = name;
+            document.getElementById('editBasePrice').value = basePrice;
+            const select = document.getElementById('editDiscountId');
+            if (discountId) {
+                select.value = discountId;
+            } else {
+                select.value = '';
+            }
+            document.getElementById('editModal').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

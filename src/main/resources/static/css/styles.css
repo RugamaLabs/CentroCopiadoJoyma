@@ -405,3 +405,77 @@ body {
     padding: 30px;
     background-color: var(--bg-color);
 }
+
+/* --- Admin Table Estilos --- */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.admin-table thead {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.admin-table th {
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.admin-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid #e8e8e8;
+    color: var(--text-color);
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f0f4fa;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Action Buttons --- */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.action-btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.edit-btn {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.edit-btn:hover {
+    background-color: #bbdefb;
+}
+
+.delete-btn {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.delete-btn:hover {
+    background-color: #ffcdd2;
+}

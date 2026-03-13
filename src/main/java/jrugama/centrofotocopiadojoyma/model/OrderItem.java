@@ -34,5 +34,5 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "print_service_id")
-    private PrintService printService;
+    private Service printService;
 }

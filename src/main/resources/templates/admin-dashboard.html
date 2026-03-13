@@ -28,9 +28,10 @@
         <!-- Sidebar Izquierdo -->
         <aside class="admin-sidebar">
             <ul class="sidebar-menu">
-                <li><a href="#" class="active"><i class="fa-solid fa-box"></i> Pedidos</a></li>
+                <li><a th:href="@{/admin/dashboard}" class="active"><i class="fa-solid fa-box"></i> Pedidos</a></li>
                 <li><a href="#"><i class="fa-solid fa-users"></i> Administración de Usuarios</a></li>
-                <li><a href="#"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
+                <li><a th:href="@{/admin/discounts}"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
+                <li><a th:href="@{/admin/services}"><i class="fa-solid fa-cogs"></i> Servicios</a></li>
             </ul>
         </aside>
 
