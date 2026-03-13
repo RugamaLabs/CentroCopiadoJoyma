@@ -11,27 +11,10 @@
 </head>
 
 <body>
-    <!-- Encabezado -->
-    <header class="main-header">
-        <div class="logo">
-            <i class="fa-solid fa-water"></i>
-            <div>Copycenter Joyma (Panel de Administrador)</div>
-        </div>
-        <nav class="header-nav">
-            <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
-        </nav>
-    </header>
+    <header th:replace="~{fragments/common :: admin-header}"></header>
 
     <div class="admin-layout">
-        <!-- Sidebar Izquierdo -->
-        <aside class="admin-sidebar">
-            <ul class="sidebar-menu">
-                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-box"></i> Pedidos</a></li>
-                <li><a href="#"><i class="fa-solid fa-users"></i> Administración de Usuarios</a></li>
-                <li><a th:href="@{/admin/discounts}" class="active"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
-                <li><a th:href="@{/admin/services}"><i class="fa-solid fa-cogs"></i> Servicios</a></li>
-            </ul>
-        </aside>
+        <aside th:replace="~{fragments/common :: admin-sidebar('descuentos')}"></aside>
 
         <!-- Contenido Principal -->
         <main class="admin-content">
@@ -145,16 +128,7 @@
         </div>
     </div>
 
-    <!-- Pie de página -->
-    <footer class="main-footer">
-        <div class="social-icons-wrapper">
-            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
-            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-        <div class="footer-title">
-            Copycenter Joyma
-        </div>
-    </footer>
+    <footer th:replace="~{fragments/common :: footer}"></footer>
 
     <script>
         // Auto-ocultar banner después de 5 segundos

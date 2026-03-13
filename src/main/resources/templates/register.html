@@ -13,17 +13,7 @@
 </head>
 
 <body>
-    <!-- Encabezado con navegación superior -->
-    <header class="main-header">
-        <div class="logo">
-            <i class="fa-solid fa-water"></i>
-            <div>Copycenter Joyma</div>
-        </div>
-        <nav class="header-nav">
-            <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
-            <a th:href="@{/login}"><i class="fa-solid fa-user"></i> Login</a>
-        </nav>
-    </header>
+    <header th:replace="~{fragments/common :: auth-header}"></header>
 
     <!-- Contenedor Principal (Registro Form) -->
     <main class="login-container">
@@ -69,16 +59,7 @@
         </div>
     </main>
 
-    <!-- Pie de página -->
-    <footer class="main-footer">
-        <div class="social-icons-wrapper">
-            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
-            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-        <div class="footer-title">
-            Copycenter Joyma
-        </div>
-    </footer>
+    <footer th:replace="~{fragments/common :: footer}"></footer>
 </body>
 
 </html>

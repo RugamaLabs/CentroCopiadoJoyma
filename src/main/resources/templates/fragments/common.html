@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<!--
+  ================================================
+  FRAGMENTOS COMUNES - Centro Fotocopiado Joyma
+  ================================================
+  Uso:
+    Header público:  th:replace="~{fragments/common :: public-header}"
+    Header admin:    th:replace="~{fragments/common :: admin-header}"
+    Footer:          th:replace="~{fragments/common :: footer}"
+    Admin Sidebar:   th:replace="~{fragments/common :: admin-sidebar(activePage='pedidos')}"
+      activePage puede ser: 'pedidos', 'descuentos', 'servicios', 'usuarios'
+-->
+
+<!-- ============================================================ -->
+<!-- HEADER PÚBLICO (home, login, register, dashboard cliente)    -->
+<!-- ============================================================ -->
+<header th:fragment="public-header(navLinks)" class="main-header">
+    <div class="logo">
+        <i class="fa-solid fa-water"></i>
+        <div>Copycenter Joyma</div>
+    </div>
+    <nav class="header-nav" th:replace="${navLinks}">
+    </nav>
+</header>
+
+<!-- Header público con nav de inicio (home) -->
+<header th:fragment="home-header" class="main-header">
+    <div class="logo">
+        <i class="fa-solid fa-water"></i>
+        <div>Copycenter Joyma</div>
+    </div>
+    <nav class="header-nav">
+        <a href="#"><i class="fa-solid fa-bullhorn"></i> Promociones</a>
+        <a href="#"><i class="fa-regular fa-calendar-days"></i> Horarios</a>
+        <a href="#"><i class="fa-solid fa-phone"></i> Contactenos</a>
+        <a href="#"><i class="fa-solid fa-hand-holding-heart"></i> Servicios</a>
+        <a th:href="@{/login}"><i class="fa-solid fa-user"></i> Login</a>
+    </nav>
+</header>
+
+<!-- Header público con nav de login/register -->
+<header th:fragment="auth-header" class="main-header">
+    <div class="logo">
+        <i class="fa-solid fa-water"></i>
+        <div>Copycenter Joyma</div>
+    </div>
+    <nav class="header-nav">
+        <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
+        <a th:href="@{/login}"><i class="fa-solid fa-user"></i> Login</a>
+    </nav>
+</header>
+
+<!-- Header público para páginas de cliente logueado (dashboard cliente) -->
+<header th:fragment="customer-header" class="main-header">
+    <div class="logo">
+        <i class="fa-solid fa-water"></i>
+        <div>Copycenter Joyma</div>
+    </div>
+    <nav class="header-nav">
+        <a th:href="@{/}"><i class="fa-solid fa-house"></i> Inicio</a>
+        <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+    </nav>
+</header>
+
+<!-- ============================================================ -->
+<!-- HEADER ADMINISTRADOR                                         -->
+<!-- ============================================================ -->
+<header th:fragment="admin-header" class="main-header">
+    <div class="logo">
+        <i class="fa-solid fa-water"></i>
+        <div>Copycenter Joyma (Panel de Administrador)</div>
+    </div>
+    <nav class="header-nav">
+        <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+    </nav>
+</header>
+
+<!-- ============================================================ -->
+<!-- SIDEBAR ADMINISTRADOR                                        -->
+<!-- Parámetro activePage: 'pedidos' | 'usuarios' | 'descuentos' | 'servicios'  -->
+<!-- ============================================================ -->
+<aside th:fragment="admin-sidebar(activePage)" class="admin-sidebar">
+    <ul class="sidebar-menu">
+        <li>
+            <a th:href="@{/admin/dashboard}"
+               th:classappend="${activePage == 'pedidos'} ? 'active' : ''">
+                <i class="fa-solid fa-box"></i> Pedidos
+            </a>
+        </li>
+        <li>
+            <a href="#"
+               th:classappend="${activePage == 'usuarios'} ? 'active' : ''">
+                <i class="fa-solid fa-users"></i> Administración de Usuarios
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/admin/discounts}"
+               th:classappend="${activePage == 'descuentos'} ? 'active' : ''">
+                <i class="fa-solid fa-tags"></i> Descuentos
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/admin/services}"
+               th:classappend="${activePage == 'servicios'} ? 'active' : ''">
+                <i class="fa-solid fa-cogs"></i> Servicios
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<!-- ============================================================ -->
+<!-- FOOTER (compartido por todas las páginas)                   -->
+<!-- ============================================================ -->
+<footer th:fragment="footer" class="main-footer">
+    <div class="social-icons-wrapper">
+        <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+        <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+    <div class="footer-title">
+        Copycenter Joyma
+    </div>
+</footer>
+
+</html>
