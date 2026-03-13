@@ -2,6 +2,7 @@ package jrugama.centrofotocopiadojoyma.service;
 
 import jrugama.centrofotocopiadojoyma.model.Discount;
 import jrugama.centrofotocopiadojoyma.repository.DiscountRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +16,20 @@ public class DiscountService {
 
     public DiscountService(DiscountRepository discountRepository) {
         this.discountRepository = discountRepository;
+    }
+
+    /**
+     * Se ejecuta automáticamente al iniciar la aplicación.
+     * Inicializa 4 tipos de descuento para propósitos de testing.
+     */
+    @PostConstruct
+    public void seedDiscounts() {
+        if (discountRepository.findAll().isEmpty()) {
+            createDiscount("Descuento Estudiante", new BigDecimal("10.00"), true);
+            createDiscount("Descuento por Volumen", new BigDecimal("15.00"), true);
+            createDiscount("Descuento Corporativo", new BigDecimal("25.00"), true);
+            createDiscount("Promoción Temporal", new BigDecimal("5.00"), false);
+        }
     }
 
     public List<Discount> getAllDiscounts() {
