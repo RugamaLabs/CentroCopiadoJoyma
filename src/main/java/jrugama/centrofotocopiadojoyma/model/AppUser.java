@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "app_users")
 public class AppUser {
-
+    // usuarios
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "services")
 public class Service {
-
+    // servicios
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

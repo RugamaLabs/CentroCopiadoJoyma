@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "print_orders")
 public class PrintOrder {
-
+    // CLASE PEDIDO
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -14,7 +14,7 @@ import jrugama.centrofotocopiadojoyma.model.enums.FileStatus;
 @Entity
 @Table(name = "print_files")
 public class PrintFile {
-
+    // CLASE ARCHIVO
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
