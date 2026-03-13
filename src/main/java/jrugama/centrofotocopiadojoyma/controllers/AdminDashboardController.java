@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminDashboardController {
@@ -33,13 +34,15 @@ public class AdminDashboardController {
     }
 
     @PostMapping("/admin/orders/{id}/status")
-    public String updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus status, jakarta.servlet.http.HttpSession session) {
+    public String updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus status,
+            jakarta.servlet.http.HttpSession session, RedirectAttributes redirectAttributes) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return "redirect:/login";
         }
 
         orderService.updateOrderStatus(id, status);
+        redirectAttributes.addFlashAttribute("successMessage", "Actualización exitosa");
         return "redirect:/admin/dashboard";
     }
 }
