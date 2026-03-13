@@ -39,4 +39,15 @@ public class OrderService {
         
         return orderRepository.save(newOrder);
     }
+
+    public List<PrintOrder> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
+        orderRepository.findById(orderId).ifPresent(order -> {
+            order.setStatus(newStatus);
+            orderRepository.save(order);
+        });
+    }
 }

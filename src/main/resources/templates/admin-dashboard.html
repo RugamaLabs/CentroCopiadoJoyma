@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Centro Fotocopiado Joyma</title>
+    <!-- Fuentes de Google y Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vincula los estilos compartidos -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <!-- Encabezado con navegación superior -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-water"></i>
+            <div>Copycenter Joyma (Panel de Administrador)</div>
+        </div>
+        <nav class="header-nav">
+            <a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+        </nav>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar Izquierdo -->
+        <aside class="admin-sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><i class="fa-solid fa-box"></i> Pedidos</a></li>
+                <li><a href="#"><i class="fa-solid fa-users"></i> Administración de Usuarios</a></li>
+                <li><a href="#"><i class="fa-solid fa-tags"></i> Descuentos</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenedor Principal (Admin Dashboard) -->
+        <main class="admin-content">
+            <section class="dashboard-header" style="text-align: left; padding: 20px 0;">
+                <h1 class="section-title">Gestión de Pedidos</h1>
+                <p>Aquí puedes ver todos los pedidos realizados por los clientes y modificar su estado.</p>
+            </section>
+
+            <section class="orders-section">
+                <div th:if="${orders.empty}" class="info-box" style="text-align: center; min-height: auto;">
+                    <p>No hay pedidos registrados en el sistema actualmente.</p>
+                </div>
+
+                <div th:unless="${orders.empty}" class="orders-grid">
+                    <!-- Tarjeta para cada pedido -->
+                    <div class="service-card" th:each="order : ${orders}" style="flex-direction: column; align-items: flex-start;">
+                        <h3 th:text="'Pedido #' + ${order.id}">Pedido #1</h3>
+                        <p style="margin-top: 10px; font-weight: bold;">
+                            Cliente: <span th:text="${order.customer != null ? order.customer.name : 'Desconocido'}" style="color: var(--primary-light);"></span>
+                        </p>
+                        <p style="color: var(--text-color); margin-top: 5px;">
+                            Monto: $<span th:text="${order.totalAmount}">0.00</span>
+                        </p>
+                        <p style="color: #666; font-size: 14px; margin-top: 5px; margin-bottom: 15px;">
+                            Fecha: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                        </p>
+                        
+                        <hr style="width: 100%; border: 0; border-top: 1px solid #ddd; margin-bottom: 15px;">
+
+                        <!-- Formulario para cambiar estado -->
+                        <form th:action="@{'/admin/orders/' + ${order.id} + '/status'}" method="post" style="width: 100%;">
+                            <label for="statusSelect" style="font-size: 14px; color: #555; display: block; margin-bottom: 5px;">Estado del Pedido:</label>
+                            <select name="status" id="statusSelect" class="form-group input" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px;">
+                                <option th:each="statusOption : ${allStatuses}" 
+                                        th:value="${statusOption}" 
+                                        th:text="${statusOption}"
+                                        th:selected="${statusOption == order.status}"></option>
+                            </select>
+                            <button type="submit" class="login-btn" style="padding: 8px; font-size: 14px;">Actualizar Estado</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="main-footer">
+        <div class="social-icons-wrapper">
+            <a href="#" class="social-btn facebook"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="#" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-title">
+            Copycenter Joyma
+        </div>
+    </footer>
+</body>
+
+</html>

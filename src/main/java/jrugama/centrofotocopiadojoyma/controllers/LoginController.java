@@ -26,8 +26,14 @@ public class LoginController {
             jakarta.servlet.http.HttpSession session) {
         if (appUserService.authenticate(username, password)) {
             session.setAttribute("username", username);
-            // Si es correcto, redirigimos a dashboard
-            return "redirect:/dashboard";
+            
+            String role = appUserService.getRoleByName(username);
+            
+            if ("ADMIN".equals(role)) {
+                return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/dashboard";
+            }
         } else {
             model.addAttribute("error", "Credenciales inválidas. Intente de nuevo.");
             return "login";
