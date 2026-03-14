@@ -30,10 +30,11 @@ public class PrintServiceService {
     @PostConstruct
     public void seedServices() {
         if (serviceRepository.findAll().isEmpty()) {
-            // Obtener el descuento de Estudiante (id=1) para asignarlo a los primeros servicios
-            createService("Copias Blanco y Negro", new BigDecimal("0.10"), 1L);
-            createService("Copias a Color", new BigDecimal("0.50"), 2L);
-            createService("Empastado / Encuadernado", new BigDecimal("15.00"), null);
+            // Obtener el descuento de Estudiante (id=1) para asignarlo a los primeros
+            // servicios
+            createService("Copias Blanco y Negro", new BigDecimal("10"), 1L);
+            createService("Copias a Color", new BigDecimal("50"), 2L);
+            createService("Empastado / Encuadernado", new BigDecimal("1000"), null);
         }
     }
 
