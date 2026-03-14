@@ -31,7 +31,8 @@
 
             <!-- Botón Agregar -->
             <div style="margin-bottom: 20px;">
-                <button class="login-btn" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('addModal').style.display='block'">
+                <button class="login-btn" style="width: auto; padding: 10px 20px;"
+                    onclick="document.getElementById('addModal').style.display='block'">
                     <i class="fa-solid fa-plus" style="margin-right: 8px;"></i> Agregar Servicio
                 </button>
             </div>
@@ -50,27 +51,29 @@
                     </thead>
                     <tbody>
                         <tr th:if="${services.empty}">
-                            <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No hay servicios registrados.</td>
+                            <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No hay servicios
+                                registrados.</td>
                         </tr>
                         <tr th:each="service : ${services}">
                             <td th:text="${service.id}"></td>
                             <td th:text="${service.name}"></td>
-                            <td th:text="'$' + ${service.basePrice}"></td>
+                            <td th:text="'₡' + ${service.basePrice}"></td>
                             <td>
-                                <span th:if="${service.discount != null}" th:text="${service.discount.description} + ' (' + ${service.discount.percentage} + '%)'"></span>
+                                <span th:if="${service.discount != null}"
+                                    th:text="${service.discount.description} + ' (' + ${service.discount.percentage} + '%)'"></span>
                                 <span th:unless="${service.discount != null}" style="color: #999;">Sin descuento</span>
                             </td>
                             <td class="actions-cell">
-                                <button class="action-btn edit-btn"
-                                        th:data-id="${service.id}"
-                                        th:data-name="${service.name}"
-                                        th:data-price="${service.basePrice}"
-                                        th:data-discount-id="${service.discount != null ? service.discount.id : ''}"
-                                        onclick="openEditModal(this)">
+                                <button class="action-btn edit-btn" th:data-id="${service.id}"
+                                    th:data-name="${service.name}" th:data-price="${service.basePrice}"
+                                    th:data-discount-id="${service.discount != null ? service.discount.id : ''}"
+                                    onclick="openEditModal(this)">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <form th:action="@{'/admin/services/' + ${service.id} + '/delete'}" method="post" style="display: inline;">
-                                    <button type="submit" class="action-btn delete-btn" onclick="return confirm('¿Estás seguro de eliminar este servicio?')">
+                                <form th:action="@{'/admin/services/' + ${service.id} + '/delete'}" method="post"
+                                    style="display: inline;">
+                                    <button type="submit" class="action-btn delete-btn"
+                                        onclick="return confirm('¿Estás seguro de eliminar este servicio?')">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
@@ -93,14 +96,17 @@
                     <input type="text" id="name" name="name" required placeholder="Ej: Copias Blanco y Negro">
                 </div>
                 <div class="form-group">
-                    <label for="basePrice">Precio Base ($)</label>
-                    <input type="number" id="basePrice" name="basePrice" step="0.01" min="0" required placeholder="Ej: 25.00">
+                    <label for="basePrice">Precio Base (₡)</label>
+                    <input type="number" id="basePrice" name="basePrice" step="0.01" min="0" required
+                        placeholder="Ej: 25.00">
                 </div>
                 <div class="form-group">
                     <label for="discountId">Descuento (Opcional)</label>
-                    <select id="discountId" name="discountId" class="form-group input" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                    <select id="discountId" name="discountId" class="form-group input"
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
                         <option value="">Sin descuento</option>
-                        <option th:each="discount : ${discounts}" th:value="${discount.id}" th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
+                        <option th:each="discount : ${discounts}" th:value="${discount.id}"
+                            th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
                     </select>
                 </div>
                 <button type="submit" class="login-btn">Guardar Servicio</button>
@@ -119,14 +125,16 @@
                     <input type="text" id="editName" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="editBasePrice">Precio Base ($)</label>
+                    <label for="editBasePrice">Precio Base (₡)</label>
                     <input type="number" id="editBasePrice" name="basePrice" step="0.01" min="0" required>
                 </div>
                 <div class="form-group">
                     <label for="editDiscountId">Descuento (Opcional)</label>
-                    <select id="editDiscountId" name="discountId" class="form-group input" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                    <select id="editDiscountId" name="discountId" class="form-group input"
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
                         <option value="">Sin descuento</option>
-                        <option th:each="discount : ${discounts}" th:value="${discount.id}" th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
+                        <option th:each="discount : ${discounts}" th:value="${discount.id}"
+                            th:text="${discount.description} + ' (' + ${discount.percentage} + '%)'"></option>
                     </select>
                 </div>
                 <button type="submit" class="login-btn">Guardar Cambios</button>
@@ -148,7 +156,7 @@
         }
 
         // Cerrar modales al hacer clic fuera
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
