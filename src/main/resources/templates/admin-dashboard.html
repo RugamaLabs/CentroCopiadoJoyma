@@ -38,32 +38,38 @@
 
                 <div th:unless="${orders.empty}" class="orders-grid">
                     <!-- Tarjeta para cada pedido -->
-                    <div class="service-card" th:each="order : ${orders}" style="flex-direction: column; align-items: flex-start;">
+                    <div class="service-card" th:each="order : ${orders}"
+                        style="flex-direction: column; align-items: flex-start;">
                         <h3 th:text="'Pedido #' + ${order.id}">Pedido #1</h3>
                         <p style="margin-top: 10px; font-weight: bold;">
-                            Cliente: <span th:text="${order.customer != null ? order.customer.name : 'Desconocido'}" style="color: var(--primary-light);"></span>
+                            Cliente: <span th:text="${order.customer != null ? order.customer.name : 'Desconocido'}"
+                                style="color: var(--primary-light);"></span>
                         </p>
                         <p style="color: var(--text-color); margin-top: 5px;">
-                            Monto: $<span th:text="${order.totalAmount}">0.00</span>
+                            Monto: ₡<span th:text="${order.totalAmount}">0.00</span>
                         </p>
                         <p style="color: #666; font-size: 14px; margin-top: 5px; margin-bottom: 15px;">
                             Fecha: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
                         </p>
-                        
+
                         <hr style="width: 100%; border: 0; border-top: 1px solid #ddd; margin-bottom: 15px;">
 
                         <!-- Formulario para cambiar estado -->
-                        <form th:action="@{'/admin/orders/' + ${order.id} + '/status'}" method="post" style="width: 100%;">
-                            <label for="statusSelect" style="font-size: 14px; color: #555; display: block; margin-bottom: 5px;">Estado del Pedido:</label>
-                            <select name="status" id="statusSelect" class="form-group input" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px;">
-                                <option th:each="statusOption : ${allStatuses}" 
-                                        th:value="${statusOption}" 
-                                        th:text="${statusOption}"
-                                        th:selected="${statusOption == order.status}"></option>
+                        <form th:action="@{'/admin/orders/' + ${order.id} + '/status'}" method="post"
+                            style="width: 100%;">
+                            <label for="statusSelect"
+                                style="font-size: 14px; color: #555; display: block; margin-bottom: 5px;">Estado del
+                                Pedido:</label>
+                            <select name="status" id="statusSelect" class="form-group input"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px;">
+                                <option th:each="statusOption : ${allStatuses}" th:value="${statusOption}"
+                                    th:text="${statusOption}" th:selected="${statusOption == order.status}"></option>
                             </select>
-                            <button type="submit" class="login-btn" style="padding: 8px; font-size: 14px;">Actualizar Estado</button>
+                            <button type="submit" class="login-btn" style="padding: 8px; font-size: 14px;">Actualizar
+                                Estado</button>
                         </form>
-                        <a th:href="@{'/admin/orders/' + ${order.id}}" class="login-btn" style="display: inline-block; text-align: center; padding: 8px; font-size: 14px; margin-top: 8px; background: #1565c0; text-decoration: none;">
+                        <a th:href="@{'/admin/orders/' + ${order.id}}" class="login-btn"
+                            style="display: inline-block; text-align: center; padding: 8px; font-size: 14px; margin-top: 8px; background: #1565c0; text-decoration: none;">
                             <i class="fa-solid fa-eye"></i> Visualizar Detalle
                         </a>
                     </div>

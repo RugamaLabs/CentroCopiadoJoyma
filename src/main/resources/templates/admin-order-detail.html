@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -73,8 +73,8 @@
                                 </div>
                             </td>
                             <td th:text="${item.quantity}">1</td>
-                            <td>$<span th:text="${item.unitPrice}">0.00</span></td>
-                            <td style="font-weight: bold;">$<span th:text="${item.subtotal}">0.00</span></td>
+                            <td>&#8353;<span th:text="${item.unitPrice}">0.00</span></td>
+                            <td style="font-weight: bold;">&#8353;<span th:text="${item.subtotal}">0.00</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -101,11 +101,11 @@
             <div class="totals-summary">
                 <div class="total-row">
                     <span>Total del Pedido:</span>
-                    <span>$<span th:text="${order.totalAmount}">0.00</span></span>
+                    <span>&#8353;<span th:text="${order.totalAmount}">0.00</span></span>
                 </div>
                 <div class="total-row grand">
                     <span>Anticipo Requerido (50%):</span>
-                    <span>$<span th:text="${order.requiredAdvancePayment}">0.00</span></span>
+                    <span>&#8353;<span th:text="${order.requiredAdvancePayment}">0.00</span></span>
                 </div>
             </div>
         </main>

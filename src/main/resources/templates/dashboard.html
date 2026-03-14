@@ -37,10 +37,10 @@
                         Estado: <span th:text="${order.status}"> RECEIVED </span>
                     </p>
                     <p style="color: var(--text-color); margin-top: 5px;">
-                        Total: $<span th:text="${order.totalAmount}">0.00</span>
+                        Total: &#8353;<span th:text="${order.totalAmount}">0.00</span>
                     </p>
                     <p style="color: #666; font-size: 14px; margin-top: 3px;">
-                        Anticipo: $<span th:text="${order.requiredAdvancePayment}">0.00</span>
+                        Anticipo: &#8353;<span th:text="${order.requiredAdvancePayment}">0.00</span>
                     </p>
                     <p style="color: #666; font-size: 14px; margin-top: 5px;">
                         Fecha: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
@@ -74,11 +74,11 @@
                 <div class="totals-box" id="totalsBox" style="display: none;">
                     <div class="total-line">
                         <span>Total Acumulado:</span>
-                        <span id="grandTotal">$0.00</span>
+                        <span id="grandTotal">&#8353;0.00</span>
                     </div>
                     <div class="total-line grand">
                         <span>Anticipo Requerido (50%):</span>
-                        <span id="advancePayment">$0.00</span>
+                        <span id="advancePayment">&#8353;0.00</span>
                     </div>
                 </div>
 
@@ -127,7 +127,7 @@
                 }
                 serviceOptions += '<option value="' + s.id + '" data-price="' + price + '"'
                     + (s.discount && s.discount.isActive ? ' data-discount="' + s.discount.percentage + '"' : '')
-                    + '>' + s.name + ' - $' + price + discountInfo + '</option>';
+                    + '>' + s.name + ' - &#8353;' + price + discountInfo + '</option>';
             });
 
             row.innerHTML =
@@ -161,7 +161,7 @@
                         '<textarea name="note" placeholder="Instrucciones especiales (opcional)"></textarea>' +
                     '</div>' +
                 '</div>' +
-                '<div class="subtotal-display">Subtotal: $<span class="item-subtotal">0.00</span></div>';
+                '<div class="subtotal-display">Subtotal: &#8353;<span class="item-subtotal">0.00</span></div>';
 
             container.appendChild(row);
             recalculate();
@@ -204,8 +204,8 @@
                 grandTotal += subtotal;
             });
 
-            document.getElementById('grandTotal').textContent = '$' + grandTotal.toFixed(2);
-            document.getElementById('advancePayment').textContent = '$' + (grandTotal * 0.5).toFixed(2);
+            document.getElementById('grandTotal').textContent = '₡' + grandTotal.toFixed(2);
+            document.getElementById('advancePayment').textContent = '₡' + (grandTotal * 0.5).toFixed(2);
 
             var totalsBox = document.getElementById('totalsBox');
             var submitBtn = document.getElementById('submitBtn');
