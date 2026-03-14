@@ -56,6 +56,19 @@ public class AdminDashboardController {
         return "redirect:/admin/dashboard";
     }
 
+    @GetMapping("/admin/orders/{id}")
+    public String orderDetail(@PathVariable Long id, Model model, jakarta.servlet.http.HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+
+        return orderService.getOrderById(id).map(order -> {
+            model.addAttribute("order", order);
+            return "admin-order-detail";
+        }).orElse("redirect:/admin/dashboard");
+    }
+
     // ===================== DESCUENTOS =====================
 
     @GetMapping("/admin/discounts")

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Pedido - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .detail-card {
+            background: white; border-radius: 10px; padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .detail-card h2 { color: var(--primary-color); margin-bottom: 15px; font-size: 22px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .detail-grid .field { margin-bottom: 4px; }
+        .detail-grid .field label { font-size: 13px; color: #888; display: block; margin-bottom: 2px; }
+        .detail-grid .field span { font-size: 16px; font-weight: 500; color: #333; }
+        .items-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .items-table th {
+            background: var(--primary-color); color: white; padding: 10px 12px;
+            text-align: left; font-size: 14px;
+        }
+        .items-table td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .items-table tr:hover { background: #f8f9fa; }
+        .file-info { background: #e3f2fd; padding: 8px 12px; border-radius: 6px; margin-top: 6px; font-size: 13px; }
+        .file-info a { color: var(--primary-color); word-break: break-all; }
+        .note-box {
+            background: #fff8e1; padding: 8px 12px; border-radius: 6px;
+            margin-top: 4px; font-size: 13px; color: #5d4037;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: var(--primary-color); text-decoration: none; font-weight: 500;
+            margin-bottom: 20px; font-size: 15px;
+        }
+        .back-btn:hover { text-decoration: underline; }
+        .totals-summary {
+            background: linear-gradient(135deg, #1a237e, #283593); color: white;
+            padding: 20px 25px; border-radius: 10px; margin-top: 20px;
+        }
+        .totals-summary .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
+        .totals-summary .total-row.grand { font-size: 22px; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 12px; }
+        .status-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; color: white; background: #43a047;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="~{fragments/common :: admin-header}"></header>
+
+    <div class="admin-layout">
+        <aside th:replace="~{fragments/common :: admin-sidebar('pedidos')}"></aside>
+
+        <main class="admin-content">
+            <a th:href="@{/admin/dashboard}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Volver a Pedidos
+            </a>
+
+            <!-- Información General del Pedido -->
+            <div class="detail-card">
+                <h2><i class="fa-solid fa-receipt"></i> Pedido #<span th:text="${order.id}">1</span></h2>
+                <div class="detail-grid">
+                    <div class="field">
+                        <label>Cliente</label>
+                        <span th:text="${order.customer != null ? order.customer.name : 'Desconocido'}">—</span>
+                    </div>
+                    <div class="field">
+                        <label>Estado</label>
+                        <span class="status-badge" th:text="${order.status}">RECEIVED</span>
+                    </div>
+                    <div class="field">
+                        <label>Fecha de Creación</label>
+                        <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">—</span>
+                    </div>
+                    <div class="field">
+                        <label>Correo del Cliente</label>
+                        <span th:text="${order.customer != null && order.customer.appUser != null ? order.customer.appUser.email : 'N/A'}">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle de Items -->
+            <div class="detail-card">
+                <h2><i class="fa-solid fa-list-check"></i> Detalle de Servicios</h2>
+
+                <div th:if="${order.orderItems == null || order.orderItems.empty}" style="text-align: center; color: #888; padding: 20px;">
+                    No hay items en este pedido.
+                </div>
+
+                <table th:unless="${order.orderItems == null || order.orderItems.empty}" class="items-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Servicio</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item, stat : ${order.orderItems}">
+                            <td th:text="${stat.index + 1}">1</td>
+                            <td>
+                                <span th:text="${item.printService != null ? item.printService.name : 'Servicio eliminado'}">—</span>
+                                <div th:if="${item.printService != null && item.printService.discount != null && item.printService.discount.isActive}" style="font-size: 12px; color: #43a047;">
+                                    <i class="fa-solid fa-tag"></i>
+                                    <span th:text="${item.printService.discount.description + ' (-' + item.printService.discount.percentage + '%)'}"></span>
+                                </div>
+                            </td>
+                            <td th:text="${item.quantity}">1</td>
+                            <td>$<span th:text="${item.unitPrice}">0.00</span></td>
+                            <td style="font-weight: bold;">$<span th:text="${item.subtotal}">0.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Archivos asociados -->
+                <div th:each="item, stat : ${order.orderItems}" th:if="${item.printFile != null}" style="margin-top: 15px;">
+                    <h4 style="font-size: 14px; color: #555; margin-bottom: 5px;">
+                        <i class="fa-solid fa-file"></i> Archivo del Servicio #<span th:text="${stat.index + 1}">1</span>
+                    </h4>
+                    <div class="file-info">
+                        <strong>URL:</strong> <a th:href="${item.printFile.storageUrl}" target="_blank" th:text="${item.printFile.storageUrl}">url</a><br>
+                        <span th:if="${item.printFile.requestedRange != null && !item.printFile.requestedRange.isBlank()}">
+                            <strong>Rango:</strong> <span th:text="${item.printFile.requestedRange}">—</span> |
+                            <strong>Páginas cobrables:</strong> <span th:text="${item.printFile.billablePages}">0</span>
+                        </span>
+                    </div>
+                    <div th:if="${item.printFile.customerNote != null && !item.printFile.customerNote.isBlank()}" class="note-box">
+                        <i class="fa-solid fa-sticky-note"></i> <strong>Nota:</strong> <span th:text="${item.printFile.customerNote}">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Totales -->
+            <div class="totals-summary">
+                <div class="total-row">
+                    <span>Total del Pedido:</span>
+                    <span>$<span th:text="${order.totalAmount}">0.00</span></span>
+                </div>
+                <div class="total-row grand">
+                    <span>Anticipo Requerido (50%):</span>
+                    <span>$<span th:text="${order.requiredAdvancePayment}">0.00</span></span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+</body>
+
+</html>

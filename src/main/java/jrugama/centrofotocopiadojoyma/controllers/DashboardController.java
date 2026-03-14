@@ -5,6 +5,7 @@ import jrugama.centrofotocopiadojoyma.model.Customer;
 import jrugama.centrofotocopiadojoyma.model.PrintOrder;
 import jrugama.centrofotocopiadojoyma.service.CustomerService;
 import jrugama.centrofotocopiadojoyma.service.OrderService;
+import jrugama.centrofotocopiadojoyma.service.PrintServiceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,22 +18,25 @@ public class DashboardController {
 
     private final CustomerService customerService;
     private final OrderService orderService;
+    private final PrintServiceService printServiceService;
 
-    public DashboardController(CustomerService customerService, OrderService orderService) {
+    public DashboardController(CustomerService customerService, OrderService orderService,
+            PrintServiceService printServiceService) {
         this.customerService = customerService;
         this.orderService = orderService;
+        this.printServiceService = printServiceService;
     }
 
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return "redirect:/login"; // Redirect if not logged in
+            return "redirect:/login";
         }
 
         Optional<Customer> customerOpt = customerService.findCustomerByAppUserName(username);
         if (customerOpt.isEmpty()) {
-            return "redirect:/login"; // Must have customer profile
+            return "redirect:/login";
         }
         
         Customer customer = customerOpt.get();
@@ -40,6 +44,7 @@ public class DashboardController {
         
         model.addAttribute("customer", customer);
         model.addAttribute("orders", orders);
+        model.addAttribute("services", printServiceService.getAllServices());
         
         return "dashboard";
     }
